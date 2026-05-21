@@ -4,18 +4,15 @@
 </p>
 <h1 align="center">Shadcn LuCI Theme</h1>
 <p align="center"><strong>A modern sidebar LuCI theme for OpenWrt, built with shadcn/ui design language.</strong></p>
-<h4 align="center">🗂️ Sidebar Layout | 🌗 Dark / Light Mode | 📱 Mobile Drawer | 🎨 OKLCH Tokens</h4>
+<h4 align="center">🗂️ Sidebar Layout | 🌗 Dark / Light Mode | 📱 Mobile Drawer</h4>
 <div align="center">
   <a href="https://openwrt.org"><img alt="OpenWrt" src="https://img.shields.io/badge/OpenWrt-%E2%89%A523.05-00B5E2?logo=openwrt&logoColor=white"></a>
-  <a href="https://www.google.com/chrome/"><img alt="Chrome" src="https://img.shields.io/badge/Chrome-%E2%89%A5111-4285F4?logo=googlechrome&logoColor=white"></a>
-  <a href="https://www.apple.com/safari/"><img alt="Safari" src="https://img.shields.io/badge/Safari-%E2%89%A516.4-000000?logo=safari&logoColor=white"></a>
-  <a href="https://www.mozilla.org/firefox/"><img alt="Firefox" src="https://img.shields.io/badge/Firefox-%E2%89%A5128-FF7139?logo=firefoxbrowser&logoColor=white"></a>
   <a href="https://github.com/eamonxg/luci-theme-shadcn/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/v/release/eamonxg/luci-theme-shadcn"></a>
   <a href="https://github.com/eamonxg/luci-theme-shadcn/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/eamonxg/luci-theme-shadcn/total"></a>
 </div>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/eamonxg/assets/master/shadcn/preview/overview.png" alt="Overview" width="100%">
+  <img src="https://raw.githubusercontent.com/eamonxg/assets/master/shadcn/preview/login.png" alt="Login Page" width="100%">
 </div>
 
 ## Features
@@ -23,23 +20,17 @@
 - **Sidebar layout**: Collapsible sidebar with accordion sub-menus and mobile drawer.
 - **Dark / Light mode**: Built-in toggle, preference persisted via `localStorage`, flash-free restore on load.
 - **shadcn/ui design**: Semantic color tokens, `rounded-lg` components, `hover:bg-muted` interactions.
-- **OKLCH color system**: All colors defined as OKLCH custom properties — easy to theme.
 - **Modern stack**: Vite + TailwindCSS v4 build, Inter variable font, Lucide icons.
 
 ## Preview
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/eamonxg/assets/master/shadcn/preview/login.png" alt="Login Page" width="49%">
-  <img src="https://raw.githubusercontent.com/eamonxg/assets/master/shadcn/preview/mobile.png" alt="Mobile View" width="49%">
+  <img src="https://raw.githubusercontent.com/eamonxg/assets/master/shadcn/preview/preview.png" alt="Theme Preview" width="100%">
 </div>
 
 ## Compatibility
 
 - **OpenWrt**: Requires OpenWrt 23.05.0 or later (ucode templates + LuCI JavaScript APIs).
-- **Browsers**: Built with TailwindCSS v4, requires:
-  - **Chrome/Edge 111+** _(March 2023)_
-  - **Safari 16.4+** _(March 2023)_
-  - **Firefox 128+** _(July 2024)_
 
 ## Installation
 
