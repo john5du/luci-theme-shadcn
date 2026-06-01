@@ -63,13 +63,19 @@ return baseclass.extend({
     const sidebar = document.getElementById("sidebar");
     if (!sidebar) return;
 
+    const bp = getComputedStyle(document.documentElement).getPropertyValue("--breakpoint-md").trim();
+    this._mobileQuery = window.matchMedia(`(width < ${bp})`);
+    this._mobileQuery.addEventListener("change", (e) => {
+      if (!e.matches) this._hideCollapsedPopover();
+    });
+
     const collapsed = localStorage.getItem(SIDEBAR_KEY) === "true";
     sidebar.setAttribute("data-collapsed", collapsed);
 
     const toggleBtn = document.getElementById("sidebar-toggle-btn");
     if (toggleBtn) {
       toggleBtn.addEventListener("click", () => {
-        if (this._isMobile()) {
+        if (this._mobileQuery.matches) {
           this.closeDrawer();
         } else {
           this.toggleCollapse();
@@ -96,11 +102,6 @@ return baseclass.extend({
         this._closeAccordionItem(item);
       });
     }
-  },
-
-  _isMobile() {
-    const bp = getComputedStyle(document.documentElement).getPropertyValue("--breakpoint-md").trim();
-    return window.matchMedia(`(width < ${bp || "48rem"})`).matches;
   },
 
   /* ── Collapsed hover popover ── */
