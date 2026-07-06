@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## Commands
 
@@ -38,8 +38,7 @@ No test suite or linter CLI. Prettier (with `prettier-plugin-tailwindcss`) runs 
 - `ut-sync-plugin` — scp's changed `.ut` templates to the router over SSH (`VITE_OPENWRT_SSH_HOST`)
 - `redirect-plugin` — redirects `/` to `/cgi-bin/luci` in dev
 - `luci-js-compress` — runs `.dev/src/resource/*.js` through terser into `resources/`
-
-Built CSS keeps Tailwind's native `@layer` structure. Theme partials (`_base.css`, `components/*`, `_utilities.css`, …) are plain unlayered CSS — organization comes from the file split, never wrap rules in `@layer`. Unlayered partials outrank Tailwind's layered base/utilities regardless of specificity; the OKLCH tokens already gate browsers to ones with `@layer` support.
+- a custom PostCSS pass strips `@layer` at-rules, since LuCI's CSS pipeline doesn't support them
 
 ## CSS
 
@@ -56,10 +55,9 @@ Style with TailwindCSS v4 `@apply`, using CSS Nesting (`&:hover`, `&[disabled]`,
 
 ## Sidebar & Menu
 
-- `header.ut`: near-minimal shell — empty `#sidebar` (like material's `#mainmenu`) plus a parser-blocking inline script right after it that replays the sidebar cache (see below) before first paint; sidebar chrome + nav are otherwise built client-side in `menu-shadcn.js`
+- `header.ut`: minimal shell — empty `#sidebar` (like material's `#mainmenu`); sidebar chrome + nav are built client-side in `menu-shadcn.js`
 - `sidebar-shadcn.js`: state machine for theme (light/dark/device), sidebar collapse/expand, accordion, and mobile drawer — exposed as `window.ShadcnSidebar` after the `shadcn-sidebar-ready` event fires
 - `menu-shadcn.js`: resolves the `admin` branch of `ui.menu.load()`, then renders a two-level sidebar matching luci-theme-material's depth; `ICON_MAP` maps a LuCI menu node's `name` to `/shadcn/icons/*.svg`; deeper levels render as `#tabmenu`
-- **Sidebar cache (anti-flash)**: `menu-shadcn.js` snapshots `#sidebar.innerHTML` + scroll position into `sessionStorage['shadcn.sidebar.cache']` (`{v, lang, html, scroll}`) after render and on `pagehide`. The `header.ut` inline script replays it pre-paint on the next navigation, recomputes the active highlight for the current URL (longest link-path prefix — keep in sync with menu-shadcn's dispatchpath matching), restores accordion/scroll state, and sets `data-shadcn-built` / `data-shadcn-restored` on `#sidebar`. When restored, `renderSidebarChrome` only re-syncs the hostname, and `renderSidebarNav` preserves accordion/scroll across its authoritative rebuild. Restored HTML loses inline JS handlers (`innerHTML` serialization), so anything that must work before the re-render needs a delegated listener — e.g. the logout click in `header.ut`, which clears the cache and sets `window.shadcnSuppressSidebarCache` so the `pagehide` re-cache stays suppressed. Bump `v` whenever the sidebar markup changes shape. Cross-document `@view-transition` rules live in `components/_view-transitions.css` (`#sidebar`/topbar get their own snapshot groups); they assume the cache keeps the sidebar's first frame populated.
 
 ## Releases
 

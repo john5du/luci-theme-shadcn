@@ -327,24 +327,6 @@ export default defineConfig(({ mode }) => {
       createUtSyncPlugin({ host: OPENWRT_SSH_HOST, key: OPENWRT_SSH_KEY }),
       createLuciJsCompressPlugin(),
     ],
-    css: {
-      postcss: {
-        plugins: [
-          {
-            postcssPlugin: "remove-layers",
-            Once(root: any) {
-              function removeLayers(node: any) {
-                node.walkAtRules("layer", (rule: any) => {
-                  removeLayers(rule);
-                  rule.replaceWith(rule.nodes);
-                });
-              }
-              removeLayers(root);
-            },
-          },
-        ],
-      },
-    },
     build: {
       outDir: BUILD_OUTPUT,
       emptyOutDir: false,
