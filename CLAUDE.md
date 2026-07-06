@@ -8,15 +8,15 @@ All dev commands run from `.dev/`:
 
 ```bash
 cd .dev/
-cp .env.example .env   # set VITE_OPENWRT_HOST / VITE_OPENWRT_SSH_HOST for proxy + .ut sync
-pnpm dev      # Vite dev server (proxies LuCI to the router; optional scp of *.ut on save)
+pnpm setup    # One-shot dev setup: router IP → .env, installs SSH key on device
+pnpm dev      # Vite dev server (proxies LuCI to the router; auto-syncs *.ut over SSH)
 pnpm build    # Clean + build production assets to htdocs/luci-static/
 pnpm clean    # Remove build output only
 pnpm gen:tokens       # Regenerate src/media/_tokens.css from tokens/*.js
 pnpm check:contrast   # Check muted text tokens meet WCAG AA contrast
 ```
 
-`VITE_OPENWRT_HOST` defaults to `http://192.168.1.1`. Set `VITE_OPENWRT_SSH_HOST` (e.g. `root@192.168.1.1`) to scp `ucode/template/themes/shadcn/*.ut` to `/usr/share/ucode/luci/template/themes/shadcn/` whenever a `.ut` file changes; leave empty to disable. Optional `VITE_OPENWRT_SSH_KEY` for a dedicated private key.
+All env vars are optional: `VITE_OPENWRT_HOST` is the bare router address (default `192.168.1.1`); the web proxy target and the `.ut`-sync SSH target (`root@<hostname>`) both derive from it — key selection etc. belongs in `~/.ssh/config`. `ucode/template/themes/shadcn/*.ut` is pushed whole to `/usr/share/ucode/luci/template/themes/shadcn/` on dev-server startup and on every save (tar over ssh stdin), and `/cgi-bin` page loads wait for in-flight pushes.
 
 No test suite or linter CLI. Prettier (with `prettier-plugin-tailwindcss`) runs on format-on-save and sorts `@apply`/class lists — don't hand-reorder them.
 
@@ -35,7 +35,7 @@ No test suite or linter CLI. Prettier (with `prettier-plugin-tailwindcss`) runs 
 `vite.config.ts` plugins worth knowing about:
 
 - `local-serve-plugin` — serves `main.css`/`login.css`/sidebar & menu JS at their `/luci-static/...` paths during `pnpm dev` and forces a full reload on change
-- `ut-sync-plugin` — scp's changed `.ut` templates to the router over SSH (`VITE_OPENWRT_SSH_HOST`)
+- `ut-sync-plugin` — pushes the `.ut` template dir to the router over SSH (full push on startup + debounced push on save; `/cgi-bin` requests wait for pending pushes)
 - `redirect-plugin` — redirects `/` to `/cgi-bin/luci` in dev
 - `luci-js-compress` — runs `.dev/src/resource/*.js` through terser into `resources/`
 
